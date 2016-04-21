@@ -10,7 +10,7 @@ var T = new Twit(twitter);
 var tweet = { status: "Hello , I am a bot!!" };
 
 // a simple post request
-T.post('statuses/update',tweet, gotData );
+// T.post('statuses/update',tweet, gotData );
 
 //a function
 function gotData(err, data, response){
@@ -54,10 +54,10 @@ function gotData(err, data, response){
 }
 
 
-var stream = T.stream('user');
+
 
 // Anytime someone follows me
-stream.on('follow', followed);
+// stream.on('follow', followed);
 
 
 function followed(eventMsg){
@@ -72,7 +72,7 @@ function followed(eventMsg){
 function follweme(text){
 //tweet the text
 var tweet = { status: text 
-console.log(text);
+// console.log(text);
 };
 
 // a simple post request
@@ -87,16 +87,61 @@ function gotData(err, data, response){
 
        console.log("followed the user!!");
     }
+}
 
 
 
+var stream = T.stream('user');
 
+// makign a method to tweet 
+
+// tweeted();
+stream.on('follow', followed);
+
+function followed(event) {
+  
+  var replyto = event.in_reply_to_screen_name;
+  // console.log(replyto);
+  var user = event.user.screen_name;
+  var text = event.user.text;
+  //change to your screen name
+  if (replyto =='ranjanah_code ')
+  {
+  	console.log('I am here')
+  	var message = '.@'+ user + "Thanks for tweeting at me";
+    tweetItback(message);
+  }
+
+ else if(replyto =='ranjanah'){
+   console.log('I am here')
+  	var message = '.@'+ user + "Thanks for tweeting at me";
+    tweetItback(message);
+
+  }
+  else	{
+  	console.log('errors');
+  }
 
 
 }
 
 
+function tweetItback(txt) {
 
+	var tweet = {
+	  status: txt
+	}
+
+	T.post('statuses/update', tweet, tweeted);
+
+	function tweeted(err, data, response) {
+	  if (err) {
+	  	console.log("Something went wwrong!");
+	  } else {
+	    console.log("Twitted it back");
+	  }
+	}
+}
 
 
 
